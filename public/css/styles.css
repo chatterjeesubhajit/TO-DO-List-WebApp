@@ -1,0 +1,288 @@
+html {
+  margin:0;
+  font-family: 'helvetica neue';
+}
+
+
+body{
+  margin:0;
+  text-align: center;
+}
+
+#div1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+
+h1 {
+  color: #fff;
+  padding: 10px;
+}
+
+.box {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 10px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+}
+
+.innerBox{
+  padding-top: 4rem;
+  background: url("/images/toDoBg3.png") no-repeat center center fixed;
+}
+.scrollable{
+  height:200px;
+  overflow: auto;
+}
+/* // conditionally change */
+#heading {
+  /* background-color: #b52c02; */
+  text-align: center;
+  /* box-shadow: inset -2px -2px 2px 2px #A683E3; */
+  box-shadow: inset -2px -2px 2px 2px #fff;
+}
+.todoList#heading{
+  background-color: #200d29;
+}
+.personalList#heading{
+  background-color: #b52c02;
+}
+.workList#heading{
+  background-color: #3c7a23;
+}
+
+.container-fluid{
+  position:absolute;
+  top:1%;
+}
+  #selector1{
+
+  right:170px;
+  margin-right:2px;
+  margin-left:2px;
+}
+
+
+#selector2{
+  top:1%;
+  right:100px;
+  margin-right:2px;
+  margin-left:2px;
+}
+
+#selector3{
+  top:1%;
+  right:20px;
+  margin-right:2px;
+  margin-left:2px;
+}
+
+.item {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #F1F1F1;
+}
+
+.item:last-child {
+  border-bottom: 0;
+}
+
+input:checked+p {
+  text-decoration: line-through;
+  text-decoration-color: #0f011c;
+  color:b8b0bf;
+}
+
+input[type="checkbox"] {
+  margin: 20px;
+}
+
+p {
+  margin: 0;
+  padding: 20px;
+  font-size: 20px;
+  font-weight: 200;
+  color: #00204a;
+
+}
+
+form {
+  text-align: center;
+  margin-left: 20px;
+}
+
+.addButton {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border-color: transparent;
+  color: #fff;
+  font-size: 2rem;
+  padding:5px;
+  padding-top:8px;
+  margin: 12px;
+  border-width: 0;
+}
+.remButton {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  border-color: transparent;
+  color: #fff;
+  font-size: 2rem;
+  padding:1px;
+  margin: 12px;
+  border-width: 0;
+}
+
+.todoList.addButton{background-color:#86377b ;opacity: 0.8;}
+.personalList.addButton{background-color:#fc7f03;opacity: 0.8; }
+.workList.addButton{background-color:#bfebae;opacity: 0.8; }
+.todoList.remButton{background-color:#86377b ;opacity: 0.8;}
+.personalList.remButton{background-color:#fc7f03;opacity: 0.8; }
+.workList.remButton{background-color:#bfebae;opacity: 0.8; }
+
+
+input[type="text"] {
+  text-align: center;
+  height: 60px;
+  top: 10px;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 200;
+  width: 300px;
+}
+
+/* // conditionally change */
+input[type="text"]:focus {
+  outline: none;
+  box-shadow: inset 0 -2px 0 0 #c6c9cf;
+}
+
+::placeholder {
+  color: grey;
+  opacity: 1;
+}
+
+footer {
+  color: white;
+  color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.hidCB{
+  position:relative;
+  top:500px;
+  left:200px;
+  z-index: -5;
+   visibility:hidden;
+   /* height:0; */
+   /* width:0; */
+}
+
+/* #########################ANIMATION PART########################## */
+@keyframes move_wave {
+    0% {
+        transform: translateX(0) translateZ(0) scaleY(1)
+    }
+    50% {
+        transform: translateX(-25%) translateZ(0) scaleY(0.55)
+    }
+    100% {
+        transform: translateX(-50%) translateZ(0) scaleY(1)
+    }
+}
+.waveWrapper {
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: auto;
+}
+
+/* :root{
+  --wrapImageBg:linear-gradient(to top, #fc7f03 20%, #b52c02 80%);
+} */
+
+/* // conditionally change */
+.waveWrapperInner{
+    position: absolute;
+    width: 100%;
+    overflow: hidden;
+    height: 100%;
+    bottom: -1px;
+    top:0;
+    /* background-image: linear-gradient(to top, #86377b 20%, #0f011c 80%); */
+    /* background-image: var(--wrapImageBg); */
+}
+
+.todoList.waveWrapperInner{
+    background-image: linear-gradient(to top, #86377b 20%, #0f011c 80%);
+}
+
+.personalList.waveWrapperInner{
+    background-image: linear-gradient(to top, #fc7f03 20%, #b52c02 80%);
+}
+
+.workList.waveWrapperInner{
+    background-image: linear-gradient(to top, #bfebae 20%, #267507  80%);
+}
+
+
+.bgTop {
+    z-index: 15;
+    opacity: 0.5;
+    top:0;
+}
+.bgMiddle {
+    z-index: 10;
+    opacity: 0.75;
+    top:0;
+}
+.bgBottom {
+    z-index: 5;
+    top:0;
+}
+.wave {
+    position: absolute;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background-repeat: repeat no-repeat;
+    background-position: 0 bottom;
+    transform-origin: center bottom;
+}
+.waveTop {
+    background-size: 50% 100px;
+}
+.waveAnimation .waveTop {
+  animation: move-wave 3s;
+   -webkit-animation: move-wave 3s;
+   -webkit-animation-delay: 1s;
+   animation-delay: 1s;
+}
+.waveMiddle {
+    background-size: 50% 120px;
+}
+.waveAnimation .waveMiddle {
+    animation: move_wave 10s linear infinite;
+}
+.waveBottom {
+    background-size: 50% 100px;
+}
+.waveAnimation .waveBottom {
+    animation: move_wave 15s linear infinite;
+}
+
+/* #########################ANIMATION PART ENDS########################## */

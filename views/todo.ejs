@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>TO-DO List</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div id="content">
+    <div class="box  <%= classType %>" id="heading">
+      <h1><%= pDay %> <br><%= listType %></h1>
+    </div>
+
+
+
+    <form class="item" action="/" onkeydown="return event.key != 'Enter';"  method="post">
+      <div class="container-fluid">
+      <button type="submit" name="tabSelector"  value="todoList" id="selector1">Default</button>
+      <button type="submit" name="tabSelector" value="personalList" id="selector2">Personal</button>
+      <button type="submit" name="tabSelector" value="workList" id="selector3">Work</button>
+    </div>
+
+      <div class="box innerBox">
+        <div class="scrollable">
+        <% for(i=0;i<nItem.length;i++) { %>
+        <div class="item">
+          <input type="checkbox">
+          <p><%=nItem[i]%></p>
+          <button type="submit" class="remButton <%= classType %>" name="checkB"  value="<%= nItem[i] %>">-</button>
+        </div>
+        <%}%>
+        </div>
+        <input type="checkbox" checked name="para" value="<%= classType %>" class="hidCB">
+    <!-- </form> -->
+    <!-- <form class="item" action="/" method="post"> -->
+      <input type="text"  name="newItem" placeholder="New Item" autocomplete="off">
+      <button type="submit" class="addButton <%= classType %>" name="button" value="<%= listType %>">+</button>
+    </div>
+    </form>
+  </div>
+
+    <div id="div1">
+      <div class="waveWrapper waveAnimation">
+      <div class="waveWrapperInner bgTop <%= classType %>">
+        <div class="wave waveTop" style="background-image: url('http://front-end-noobs.com/jecko/img/wave-top.png')"></div>
+      </div>
+      <div class="waveWrapperInner  bgMiddle <%= classType %>">
+        <div class="wave waveMiddle" style="background-image: url('http://front-end-noobs.com/jecko/img/wave-mid.png')"></div>
+      </div>
+      <div class="waveWrapperInner  bgBottom <%= classType %>">
+        <div class="wave waveBottom" style="background-image: url('http://front-end-noobs.com/jecko/img/wave-bot.png')"></div>
+      </div>
+    </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="extra.js" charset="utf-8"></script>
+  </body>
+
+</html>
