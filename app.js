@@ -100,7 +100,6 @@ else{  redir=listMap[lT];}
   }
 //item removal part ends
 
-
   console.log("ltype: "+lType);
 
   if (typeof item !='undefined' && item.trim() != "") {
