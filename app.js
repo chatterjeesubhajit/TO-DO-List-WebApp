@@ -5,8 +5,12 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 var items = ["Click ➕ to add","Click ☑ to complete","Click ➖ to remove"];
+var itemsChecked=["notStrike","notStrike","notStrike"];
 var wLItems = ["Click ➕ to add","Click ☑ to complete","Click ➖ to remove"];
+var wLitemsChecked=["notStrike","notStrike","notStrike"];
 var pLItems = ["Click ➕ to add","Click ☑ to complete","Click ➖ to remove"];
+var pLitemsChecked=["notStrike","notStrike","notStrike"];
+
 var listTypes = ["To-Do List","Personal List","Work List"];
 var classNames=["todoList","personalList","workList"];
 let listMap={
@@ -37,6 +41,7 @@ app.get("/", function(req, res) {
   res.render('todo', {
     pDay: dayN,
     nItem: items,
+    strikeItem:itemsChecked,
     listType:listType,
     classType:classNames[0]
   });
@@ -47,6 +52,7 @@ app.get("/work",function(req, res){
   res.render('todo', {
     pDay: dayN,
     nItem: wLItems,
+    strikeItem:wLitemsChecked,
     listType:listType,
     classType:classNames[2]
   });
@@ -57,14 +63,14 @@ app.get("/personal",function(req, res){
   res.render('todo', {
     pDay: dayN,
     nItem: pLItems,
+    strikeItem:pLitemsChecked,
     listType:listType,
     classType:classNames[1]
   });
 });
 
 app.post("/", function(req, res) {
-  console.log(req.body);
-
+  console.log(req.body.tabSelector);
   let item = req.body.newItem;
   // Below part is to remove an item as clicked on '-' button
   let rItem = req.body.checkB;
@@ -82,6 +88,7 @@ else{  redir=listMap[lT];}
         let ind = wLItems.indexOf(rItem);
         console.log("removing '" + wLItems[ind] +"' from list");
         wLItems.splice(ind, 1);
+        wLitemsChecked.splice(ind,1);
         redir="/work";
       }
       else if(lT==="todoList")
@@ -89,39 +96,72 @@ else{  redir=listMap[lT];}
         let ind = items.indexOf(rItem);
         console.log("removing '" + items[ind] +"' from list");
         items.splice(ind, 1);
+        itemsChecked.splice(ind,1);
         redir="/";
       }
       else {
         let ind = pLItems.indexOf(rItem);
         console.log("removing '" + pLItems[ind] +"' from list");
         pLItems.splice(ind, 1);
+        pLitemsChecked.splice(ind,1);
         redir="/personal";
       }
   }
 //item removal part ends
 
   console.log("ltype: "+lType);
-
+// Item addition part begins
   if (typeof item !='undefined' && item.trim() != "") {
     console.log("adding '" + item.trim() +"' to list");
 
       if(lType=="workList")
       {
         wLItems.push(item);
+        wLitemsChecked.push("notStrike");
         redir="/work";
       }
       else if(lType=="todoList") {
         items.push(item);
+        itemsChecked.push("notStrike");
         redir="/";
       }
       else {
         pLItems.push(item);
+        pLitemsChecked.push("notStrike");
         redir="/personal";
       }
   } else {
     console.log("empty item, not adding");
   }
+// Item addition part ends
 
+// Item checked status part begins
+let itemCB=req.body.itemCB;
+if(typeof itemCB !="undefined" && itemCB.trim() !="" )
+{
+  let ind=0;
+  switch(lT){
+    case "workList":
+    ind = wLItems.indexOf(itemCB);
+    if(wLitemsChecked[ind]=="notStrike"){wLitemsChecked[ind]="Strike";}
+    else if(wLitemsChecked[ind]=="Strike"){wLitemsChecked[ind]="notStrike";}
+
+    break;
+    case "todoList":
+    ind = items.indexOf(itemCB);
+    if(itemsChecked[ind]=="notStrike"){itemsChecked[ind]="Strike";}
+    else if(itemsChecked[ind]=="Strike"){itemsChecked[ind]="notStrike";}
+    break;
+    case "personalList":
+    ind = pLItems.indexOf(itemCB);
+    if(pLitemsChecked[ind]=="notStrike"){pLitemsChecked[ind]="Strike";}
+    else if(pLitemsChecked[ind]=="Strike"){pLitemsChecked[ind]="notStrike";}
+    break;
+
+  }
+
+}
+// Item checked status part ends
 console.log("redir "+redir);
 res.redirect(redir);
 });

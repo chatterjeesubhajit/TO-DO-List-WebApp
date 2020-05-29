@@ -23,6 +23,22 @@ h1 {
   color: #fff;
   padding: 10px;
 }
+.container-fluid{
+  position: absolute;
+  top: 10.5rem;
+  width:100%;
+  text-align: center;
+}
+.btn{
+  margin-top:2px;
+  margin-bottom:10px;
+  background-color:rgba(55, 176, 237,0.0);
+  box-shadow: inset -1px -1px 1px 1px #fff;
+  font-size: 1rem;
+  color:#fff;
+  margin-right: 1%;
+  border-radius: 5px;
+}
 
 .box {
   max-width: 500px;
@@ -58,31 +74,6 @@ h1 {
   background-color: #3c7a23;
 }
 
-.container-fluid{
-  position:absolute;
-  top:1%;
-}
-  #selector1{
-
-  right:170px;
-  margin-right:2px;
-  margin-left:2px;
-}
-
-
-#selector2{
-  top:1%;
-  right:100px;
-  margin-right:2px;
-  margin-left:2px;
-}
-
-#selector3{
-  top:1%;
-  right:20px;
-  margin-right:2px;
-  margin-left:2px;
-}
 
 .item {
   min-height: 70px;
@@ -95,10 +86,20 @@ h1 {
   border-bottom: 0;
 }
 
-input:checked+p {
+.Strike {
   text-decoration: line-through;
   text-decoration-color: #0f011c;
   color:b8b0bf;
+}
+
+.checkboxItem {
+   height: 25px;
+   width: 25px;
+   -webkit-appearance: checkbox;
+   -moz-appearance: checkbox;
+   -ms-appearance: checkbox;
+   -o-appearance: checkbox;
+   appearance: checkbox;
 }
 
 input[type="checkbox"] {
@@ -120,27 +121,28 @@ form {
 }
 
 .addButton {
-  height: 50px;
-  width: 50px;
+  height:3rem;
+  width:3rem;
   border-radius: 50%;
-  border-color: transparent;
-  color: #fff;
   font-size: 2rem;
-  padding:5px;
-  padding-top:8px;
-  margin: 12px;
-  border-width: 0;
+  /* border-color: transparent; */
+  /* border-style: hidden; */
+  color: #fff;
+  /* padding-bottom:1rem; */
+  margin:1rem;
+
+
 }
 .remButton {
-  height: 40px;
-  width: 40px;
+  height:2rem;
+  width:2rem;
   border-radius: 50%;
-  border-color: transparent;
+  font-size: 1.5rem;
+  /* border-color: transparent; */
+  /* border-style: hidden; */
   color: #fff;
-  font-size: 2rem;
-  padding:1px;
-  margin: 12px;
-  border-width: 0;
+  padding-right:1.7rem;
+  /* margin:1rem; */
 }
 
 .todoList.addButton{background-color:#86377b ;opacity: 0.8;}
