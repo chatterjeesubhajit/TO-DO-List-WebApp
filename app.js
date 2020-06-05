@@ -4,166 +4,182 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-var items = ["Click ➕ to add","Click ☑ to complete","Click ➖ to remove"];
-var itemsChecked=["notStrike","notStrike","notStrike"];
-var wLItems = ["Click ➕ to add","Click ☑ to complete","Click ➖ to remove"];
-var wLitemsChecked=["notStrike","notStrike","notStrike"];
-var pLItems = ["Click ➕ to add","Click ☑ to complete","Click ➖ to remove"];
-var pLitemsChecked=["notStrike","notStrike","notStrike"];
+const _ = require("lodash");
 
-var listTypes = ["To-Do List","Personal List","Work List"];
-var classNames=["todoList","personalList","workList"];
-let listMap={
-  todoList:"/",
-  workList:"/work",
-  personalList:"/personal"
-}
-var i = 0;
+// ************DB PART************
+const mongoose=require("mongoose");
+mongoose.connect("mongodb+srv://admin_subhajit:Being801@cluster0-u7c8q.mongodb.net/todoListDB?retryWrites=true&w=majority",{ useNewUrlParser: true,useUnifiedTopology: true,useFindAndModify: false });
+//create a new schema
+const itemSchema= new mongoose.Schema({
+  name:{type:String},
+  itemsChecked:{type:String,default:"notStrike",enum: ["notStrike", "Strike"] }
+});
 
-let options = {
-  weekday: "long",
-  day: "numeric",
-  month: "long",
-  year: "numeric"
-};
-let today = new Date();
-let dayN = today.toLocaleDateString("en-US", options);
+// // let initialCount=0;
+// // using the above schema we create a mongoose model,use singular name of collection ( it will automatically conver to plural name)
+const Item= mongoose.model("Item",itemSchema); //Person collection converted to plural 'people' by mongoose
 
-// const https=require('https');
-// const request=require('request');
-// const ejs=require('ejs');
+// Item.countDocuments({}, function(err, c) {initialCount=c;});
+
+//intentionally didn't provide 'checked' field value to see if default declaration in schema works : works!
+let defItem1=new Item({  name:"Click ➕ to add"});
+let defItem2=new Item({  name:"Click ☑ to complete"});
+let defItem3=new Item({  name:"Click ➖ to remove"});
+
+let defItems=[defItem1,defItem2,defItem3];
+
+
+const listSchema=new mongoose.Schema({
+  name:{
+    type:String,
+    required:[true,'need list schema type']
+  },
+  items:[itemSchema]
+});
+
+const List=mongoose.model("List",listSchema);
+
+// ************DB PART ENDS************
+
+// 
+// const listTypes = ["To-Do List","Personal List","Work List"];
+// const classNames=["todoList","personalList","workList"];
+// const listMap={
+//   todoList:"/",
+//   workList:"/work",
+//   personalList:"/personal"
+// }
+
+
+const date=require(__dirname + "/date.js");
+let dayN=date.getDate();
 app.set('view engine', 'ejs');
 
 app.use(express.static("public")); //don't use this when using ejs
 
-app.get("/", function(req, res) {
-  let listType=listTypes[0];
-  res.render('todo', {
-    pDay: dayN,
-    nItem: items,
-    strikeItem:itemsChecked,
-    listType:listType,
-    classType:classNames[0]
+const toKebabCase = string => string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
+
+
+// using routing parameters
+app.get("/", function  (req,res){
+  let listType="ToDo";
+  listType=_.capitalize(toKebabCase(listType.toLowerCase()));
+  List.findOne({name:listType},function(err,obj){
+    if(!err)
+    {
+    if(!obj){
+      let list=new List({name:listType,items:defItems});
+      list.save();
+      res.redirect("/");
+    }
+    else {
+      res.render('custom', {
+        pDay: dayN,
+        nItem: obj.items,
+        listType:listType,
+        classType:"todoList"
+      });
+    }
+  }
   });
 });
 
-app.get("/work",function(req, res){
-  let listType=listTypes[2];
-  res.render('todo', {
-    pDay: dayN,
-    nItem: wLItems,
-    strikeItem:wLitemsChecked,
-    listType:listType,
-    classType:classNames[2]
+app.get("/:customList", function  (req,res){
+  let listType=toKebabCase(req.params.customList.toLowerCase());
+  listType=_.capitalize(listType);
+
+  List.findOne({name:listType},function(err,obj){
+    if(!err)
+    {
+    if(!obj){
+      let list=new List({name:listType,items:defItems});
+      list.save();
+      res.redirect("/"+listType);
+    }
+    else {
+      res.render('custom', {
+        pDay: dayN,
+        nItem: obj.items,
+        listType:listType,
+        classType:"todoList"
+      });
+    }
+  }
   });
 });
 
-app.get("/personal",function(req, res){
-  let listType=listTypes[1];
-  res.render('todo', {
-    pDay: dayN,
-    nItem: pLItems,
-    strikeItem:pLitemsChecked,
-    listType:listType,
-    classType:classNames[1]
-  });
-});
-
-app.post("/", function(req, res) {
-  console.log(req.body.tabSelector);
-  let item = req.body.newItem;
-  // Below part is to remove an item as clicked on '-' button
-  let rItem = req.body.checkB;
-  let lT= req.body.para;
-  let lType=lT;
-  let redir="";
-if(typeof req.body.tabSelector !='undefined' && req.body.tabSelector !='')
-{redir=listMap[req.body.tabSelector];}
-else{  redir=listMap[lT];}
 
 
-  if (item.length === 0  && (typeof rItem !="undefined" && rItem.trim() != "")) {
-      if(lT==="workList")
-      {
-        let ind = wLItems.indexOf(rItem);
-        console.log("removing '" + wLItems[ind] +"' from list");
-        wLItems.splice(ind, 1);
-        wLitemsChecked.splice(ind,1);
-        redir="/work";
-      }
-      else if(lT==="todoList")
-      {
-        let ind = items.indexOf(rItem);
-        console.log("removing '" + items[ind] +"' from list");
-        items.splice(ind, 1);
-        itemsChecked.splice(ind,1);
-        redir="/";
-      }
-      else {
-        let ind = pLItems.indexOf(rItem);
-        console.log("removing '" + pLItems[ind] +"' from list");
-        pLItems.splice(ind, 1);
-        pLitemsChecked.splice(ind,1);
-        redir="/personal";
-      }
-  }
-//item removal part ends
+// using routing parameters to add to custom list
+app.post("/:customList", function  (req,res){
 
-  console.log("ltype: "+lType);
-// Item addition part begins
-  if (typeof item !='undefined' && item.trim() != "") {
-    console.log("adding '" + item.trim() +"' to list");
+  let listType=toKebabCase(req.params.customList.toLowerCase());
+  listType=_.capitalize(listType);
+  let newItem=new Item({name:req.body.newItem});
 
-      if(lType=="workList")
-      {
-        wLItems.push(item);
-        wLitemsChecked.push("notStrike");
-        redir="/work";
-      }
-      else if(lType=="todoList") {
-        items.push(item);
-        itemsChecked.push("notStrike");
-        redir="/";
-      }
-      else {
-        pLItems.push(item);
-        pLitemsChecked.push("notStrike");
-        redir="/personal";
-      }
-  } else {
-    console.log("empty item, not adding");
-  }
-// Item addition part ends
+  console.log("list type "+listType);
+  console.log("newItem "+newItem);
 
-// Item checked status part begins
-let itemCB=req.body.itemCB;
-if(typeof itemCB !="undefined" && itemCB.trim() !="" )
-{
-  let ind=0;
-  switch(lT){
-    case "workList":
-    ind = wLItems.indexOf(itemCB);
-    if(wLitemsChecked[ind]=="notStrike"){wLitemsChecked[ind]="Strike";}
-    else if(wLitemsChecked[ind]=="Strike"){wLitemsChecked[ind]="notStrike";}
-
-    break;
-    case "todoList":
-    ind = items.indexOf(itemCB);
-    if(itemsChecked[ind]=="notStrike"){itemsChecked[ind]="Strike";}
-    else if(itemsChecked[ind]=="Strike"){itemsChecked[ind]="notStrike";}
-    break;
-    case "personalList":
-    ind = pLItems.indexOf(itemCB);
-    if(pLitemsChecked[ind]=="notStrike"){pLitemsChecked[ind]="Strike";}
-    else if(pLitemsChecked[ind]=="Strike"){pLitemsChecked[ind]="notStrike";}
-    break;
-
-  }
-
+  List.findOne({name:listType},function(err,obj){
+    if(!err){
+      if(obj)
+{   obj.items.push(newItem);
+    obj.save();
+    res.redirect("/"+listType);
 }
-// Item checked status part ends
-console.log("redir "+redir);
-res.redirect(redir);
+else {
+  res.send("object not found");
+}
+  }
+  });
+});
+
+//Check part
+app.post("/:customList/check", function  (req,res){
+  console.log(req.body);
+  let listType=toKebabCase(req.params.customList.toLowerCase());
+  listType=_.capitalize(listType);
+  let check=req.body.itemCheck;
+let fileId = mongoose.Types.ObjectId(check);
+
+List.updateOne({name:listType,items:{$elemMatch:{_id:fileId,itemsChecked:"Strike"}}},{$set:{"items.$.itemsChecked":"notStrike"}},function(err,result){
+  if(!err){
+  if(result.nModified)
+  {
+    console.log("modified to not-strike");
+    res.redirect("/"+listType);
+  }
+  else {
+    List.updateOne({name:listType,items:{$elemMatch:{_id:fileId,itemsChecked:"notStrike"}}},{$set:{"items.$.itemsChecked":"Strike"}},function(err,result){});
+    console.log("modified to strike");
+    res.redirect("/"+listType);
+  }
+}
+});
+
+
+});
+
+
+//remove part
+app.post("/:customList/remove", function  (req,res){
+
+  let listType=toKebabCase(req.params.customList.toLowerCase());
+  listType=_.capitalize(listType);
+  let remItemId = req.body.remItem;
+  console.log("list type"+listType);
+  console.log("rem item id"+remItemId);
+  List.findOneAndUpdate({name:listType},{$pull:{items:{_id:remItemId}}},function(error,result){
+  if(error)
+  {
+    console.log("could not remove the document with following id: "+remItemId);
+  }
+  else {
+    console.log("successfully removed the document with following id: "+remItemId);
+    res.redirect("/"+listType);
+  }
+  }
+);
 });
 
 

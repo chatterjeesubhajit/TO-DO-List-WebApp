@@ -1,0 +1,58 @@
+<%-include("header")-%>
+
+<body>
+  <!-- jQUery scripts -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+  <div id="content">
+    <div class="switchtabform">
+    <input type="text" name="switchTab" id="switchurl" placeholder="Create / Go To Custom To-Do List" class="switchTab" autocomplete="off">
+    <button type="submit" class="switch" id="switchbtn" name="button" value="<%= listType %>"><i class="fas fa-angle-double-right"></i></button>
+    </div>
+    <script> window.onload = function(){ document.getElementById('switchbtn').onclick = function() { window.location.href = "http://localhost:3000/"+document.getElementById("switchurl").value }; }; </script>
+
+    <div class="box  <%= classType %>" id="heading">
+            <h1><%= pDay %> <br><br><%= listType %></h1>
+    </div>
+
+      <div class="box innerBox">
+        <div class="scrollable">
+        <% nItem.forEach((element)=> { %>
+        <div class="item">
+          <form class="item" action="/<%= listType %>/check" onkeydown="return event.key != 'Enter';"  method="post">
+          <button class="checkboxItem" type="submit" name="itemCheck" value="<%= element._id %>">✔</button>
+          <p class="<%=element.itemsChecked%>"><%=element.name%></p>
+          </form>
+          <form class="item" action="/<%= listType %>/remove" onkeydown="return event.key != 'Enter';"  method="post">
+          <button type="submit" class="remButton <%= classType %>" name="remItem"  value="<%= element._id %>"><i class="fas fa-minus"></i></button>
+          </form>
+        </div>
+        <%})%>
+
+        </div>
+
+    <!-- </form> -->
+    <!-- <form class="item" action="/" method="post"> -->
+    <form class="item" action="/<%= listType %>" onkeydown="return event.key != 'Enter';"  method="post">
+      <input type="text"  name="newItem" placeholder="New Item" autofocus autocomplete="off">
+      <button type="submit" class="addButton <%= classType %>" name="button" value="<%= listType %>"><i class="fas fa-plus"></i></button>
+    </div>
+    </form>
+  </div>
+
+    <div id="div1">
+      <div class="waveWrapper waveAnimation">
+      <div class="waveWrapperInner bgTop <%= classType %>">
+        <div class="wave waveTop" style="background-image: url('http://front-end-noobs.com/jecko/img/wave-top.png')"></div>
+      </div>
+      <div class="waveWrapperInner  bgMiddle <%= classType %>">
+        <div class="wave waveMiddle" style="background-image: url('http://front-end-noobs.com/jecko/img/wave-mid.png')"></div>
+      </div>
+      <div class="waveWrapperInner  bgBottom <%= classType %>">
+        <div class="wave waveBottom" style="background-image: url('http://front-end-noobs.com/jecko/img/wave-bot.png')"></div>
+      </div>
+    </div>
+    </div>
+    <script src="extra.js" charset="utf-8"></script>
+  </body>
+
+</html>

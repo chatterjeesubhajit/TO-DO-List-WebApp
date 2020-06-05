@@ -62,9 +62,10 @@ h1 {
   /* background-color: #b52c02; */
   text-align: center;
   /* box-shadow: inset -2px -2px 2px 2px #A683E3; */
-  box-shadow: inset -2px -2px 2px 2px #fff;
+  box-shadow: inset -2px -2px 2px 2px gray;
+  background-color: #200d29;
 }
-.todoList#heading{
+/* .todoList#heading{
   background-color: #200d29;
 }
 .personalList#heading{
@@ -72,7 +73,7 @@ h1 {
 }
 .workList#heading{
   background-color: #3c7a23;
-}
+} */
 
 
 .item {
@@ -190,7 +191,29 @@ footer {
    /* height:0; */
    /* width:0; */
 }
+.switchtabform{
+  position:absolute;
+  /* display: inline-block; */
+  right:20px;
+  /* transform: translate(-50%, -50%); */
+}
+input.switchTab{
+  /* width:80%; */
+  height:2rem;
+  text-align: center;
+  box-shadow:  inset -1px -1px 1px 1px #fff;
+  color: #fff;
+  placeholder:#fff;
+}
 
+#switchbtn{
+border-radius: 50%;
+height:2.2rem;
+width:2.2rem;
+background-color: inherit;
+color: cyan;
+
+}
 /* #########################ANIMATION PART########################## */
 @keyframes move_wave {
     0% {
