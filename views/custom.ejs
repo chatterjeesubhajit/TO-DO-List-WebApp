@@ -8,7 +8,7 @@
     <input type="text" name="switchTab" id="switchurl" placeholder="Create / Go To Custom To-Do List" class="switchTab" autocomplete="off">
     <button type="submit" class="switch" id="switchbtn" name="button" value="<%= listType %>"><i class="fas fa-angle-double-right"></i></button>
     </div>
-    <script> window.onload = function(){ document.getElementById('switchbtn').onclick = function() { window.location.href = "https://obscure-basin-53238.herokuapp.com/"+document.getElementById("switchurl").value }; }; </script>
+    <script> window.onload = function(){ document.getElementById('switchbtn').onclick = function() { window.location.hostname= "http://obscure-basin-53238.herokuapp.com/"+document.getElementById("switchurl").value }; }; </script>
 
     <div class="box  <%= classType %>" id="heading">
             <h1><%= pDay %> <br><br><%= listType %></h1>
