@@ -1,6 +1,4 @@
 ****************Web-App Link :****************
-https://whispering-cliffs-08804.herokuapp.com/
-
 
 A custom To-Do List for your daily needs!
 
